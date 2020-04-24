@@ -1,0 +1,13 @@
+{
+    "TableName": "CloudUsers",
+    "KeySchema": [
+      { "AttributeName": "accountId", "KeyType": "HASH" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "accountId", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    }
+}

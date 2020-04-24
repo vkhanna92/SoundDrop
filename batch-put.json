@@ -1,0 +1,20 @@
+{
+  "CloudUsers": [
+    {
+      "PutRequest": {
+        "Item":
+        {
+          "accountId": {
+            "S": "test-acount-id"
+          },
+          "accessKey": {
+            "S": "test-access-key"
+          },
+		  "phoneNumber": {
+		  "S": "9796764642"
+		  }
+        }
+      }
+    }
+	]
+}
