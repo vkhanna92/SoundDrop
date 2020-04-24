@@ -41,7 +41,10 @@ def profile():
         )
         phone_number = None
         if 'Item' in response:
-            phone_number = response['Item']['phoneNumber']
+            try:
+                phone_number = response['Item']['phoneNumber']
+            except KeyError:
+                phone_number = None
             table.update_item(
                 Key={
                     'accountId': account_id
@@ -69,11 +72,12 @@ def profile():
 def save():
     phone_number = request.args.get('number')
     account_id = request.args.get('account_id')
-
+    print(str(account_id))
+    print(type(phone_number))
     if phone_number:
         table.update_item(
             Key={
-                'accountId' : account_id
+                'accountId' : str(account_id)
             },
             UpdateExpression='SET phoneNumber = :number' ,
             ExpressionAttributeValues={

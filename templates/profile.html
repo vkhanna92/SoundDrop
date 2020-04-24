@@ -18,7 +18,8 @@
             tag.appendChild(text);
             var element = document.getElementById("phone");
             element.appendChild(tag);
-            btn.disabled=true;   
+            btn.disabled=true;
+            document.forms["save"].submit();   
         }
         function invalid(textbox) {
             if(textbox.validity.patternMismatch){
@@ -32,7 +33,7 @@
     </script>
     <form action="/save" id="save">
       Your Account ID :
-      <input type="text" name="account_id" value={{account_id}} disabled><br>
+      <input type="text" name="account_id" value={{account_id}} readonly="readonly"><br>
       Phone number :
       {% if phone_number %}
         <input type="number" name="number" value={{phone_number}}><br><br>
