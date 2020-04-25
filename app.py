@@ -2,8 +2,10 @@ from flask import Flask
 from flask import render_template, request, redirect
 import boto3
 from boto3.dynamodb.conditions import Key
-from info import APP_KEY, APP_SECRET, REDIRECT_URI
+from info import APP_KEY, APP_SECRET, REDIRECT_URI,TOPIC_ARN
 import requests as r
+from twilio.twiml.messaging_response import MessagingResponse
+import re
 
 app = Flask(__name__)
 
@@ -97,3 +99,40 @@ def save():
 @app.route('/error')
 def error():
   return render_template('error.html')
+
+@app.route("/download", methods=['POST'])
+def incoming():
+  phone_number = request.values.get('From', None)
+  print(type(phone_number))
+  resp = MessagingResponse()
+  response = table.query(
+    IndexName='phoneNumber-index',
+    KeyConditionExpression=Key('phoneNumber').eq(phone_number)
+  )
+  if len(response['Items']) == 0:
+    resp.message('This is an unregistered or corrupted number!')
+    return str(resp)
+  
+  url = request.values.get('Body', None)
+  
+  if not re.search(r'soundcloud\.com\/.+\/.+$', url):
+    resp.message('This is not a valid link!')
+    return str(resp)
+  
+  client = boto3.client("sns")
+  r = client.publish(
+      TopicArn=TOPIC_ARN,
+      Message='string',
+      MessageAttributes={
+          'url': {
+            'DataType': 'String',
+            'StringValue': url
+          },
+          'phoneNumber': {
+            'DataType': 'Number',
+            'StringValue': str(response['Items'][0]['phoneNumber'])
+          }
+      }
+  )
+  resp.message('Attempting to download!')
+  return str(resp)
