@@ -98,7 +98,9 @@ def save():
 
 @app.route('/error')
 def error():
-  return render_template('error.html')
+    resp = MessagingResponse()
+    resp.message("Your request errored out!")
+    return resp
 
 @app.route("/download", methods=['POST'])
 def incoming():
@@ -107,7 +109,7 @@ def incoming():
   resp = MessagingResponse()
   response = table.query(
     IndexName='phoneNumber-index',
-    KeyConditionExpression=Key('phoneNumber').eq(phone_number)
+    KeyConditionExpression=Key('phoneNumber').eq(phone_number[2:])
   )
   if len(response['Items']) == 0:
     resp.message('This is an unregistered or corrupted number!')

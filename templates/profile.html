@@ -9,39 +9,25 @@
     <a href="/">Soundsave</a>
   </div>
   <h1 class="header">Profile</h1>
-  <div class="phone" id="phone">
-    <script>
-        function disable(){
-            var btn = document.getElementById("saveBtn")
-            var tag = document.createElement("p");
-            var text = document.createTextNode("Phone number saved! You may now text the number +1-224-507-6987 to begin using our service!");
-            tag.appendChild(text);
-            var element = document.getElementById("phone");
-            element.appendChild(tag);
-            btn.disabled=true;
-            document.forms["save"].submit();   
-        }
-        function invalid(textbox) {
-            if(textbox.validity.patternMismatch){
-                textbox.setCustomValidity('please enter 10 numeric value.');
-            }    
-            else {
-                textbox.setCustomValidity('');
-    }
-    return true;
-        }
-    </script>
-    <form action="/save" id="save">
-      Your Account ID :
-      <input type="text" name="account_id" value={{account_id}} readonly="readonly"><br>
-      Phone number :
+  <div class="phone">
+    <form action="/save">
+      Your Account ID (do not modify):
+      <input type="text" name="account_id" value={{account_id}}><br>
+      Phone number:
       {% if phone_number %}
-        <input type="number" name="number" value={{phone_number}}><br><br>
+        <input type="text" name="number" value={{phone_number}}><br><br>
       {% else %}
-        <input  type="tel" name="number" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" oninvalid="invalid(this);" oninput="invalid(this);" placeholder="ex. 1234567890" required><br><br>
+        <input type="text" name="number" placeholder="ex. 3015557856"><br><br>
       {% endif %}
-      <input id="saveBtn" type="submit" value="Save" onclick="disable()">
+      <input type="submit" value="Save">
     </form>
+    {% if saved %}
+      <p>Phone number saved! You may now text the number +1-224-507-6987 to begin using our service!</p>
+    {% endif %}
+    {% if error %}
+      <p>Error saving phone number. Please enter a non-empty phone number with
+        no spaces or dashes.
+    {% endif %}
   </div>
 </body>
 </html>
