@@ -16,7 +16,7 @@ def lambda_handler(event, context):
 	response = s3.head_object(Bucket=bucket, Key=key)
 	print("##########################################")
 	print(response['Metadata'])
-	#phone_number = response['Metadata']['phonenumber']
+	phone_number = response['Metadata']['phonenumber']
 	'''
 	# get the dropbox token
 	users = table.query(
