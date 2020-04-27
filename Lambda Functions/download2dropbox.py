@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 import os
 import boto3
 import dropbox
+import urllib.parse
 from boto3.dynamodb.conditions import Key,Attr
 
 s3 = boto3.client('s3')
@@ -12,10 +15,11 @@ def lambda_handler(event, context):
 	# figure out what the object is
 	bucket = 'soundsave'
 	key = event['Records'][0]['s3']['object']['key'].replace('+', ' ')
-	print (event['Records'][0])
+	key = urllib.parse.unquote(key)
+	print(key)
 	response = s3.head_object(Bucket=bucket, Key=key)
-	phone_number = response['Metadata']['phone_number']
-
+	phone_number = response['Metadata']['phonenumber']
+	
 	# get the dropbox token
 	users = table.query(
 		IndexName='phoneNumber-index', KeyConditionExpression=Key('phoneNumber').eq(phone_number)
