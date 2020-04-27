@@ -17,7 +17,7 @@ def lambda_handler(event, context):
 	print("##########################################")
 	print(response['Metadata'])
 	phone_number = response['Metadata']['phonenumber']
-	'''
+	
 	# get the dropbox token
 	users = table.query(
 		IndexName='phoneNumber-index', KeyConditionExpression=Key('phoneNumber').eq(phone_number)
@@ -37,4 +37,4 @@ def lambda_handler(event, context):
     Bucket=bucket,
     Key=key,  
 	)
-	'''
+	
