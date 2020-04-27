@@ -14,10 +14,8 @@ def lambda_handler(event, context):
 	key = event['Records'][0]['s3']['object']['key'].replace('+', ' ')
 	print (event['Records'][0])
 	response = s3.head_object(Bucket=bucket, Key=key)
-	print("##########################################")
-	print(response['Metadata'])
-	phone_number = response['Metadata']['phonenumber']
-	
+	phone_number = response['Metadata']['phone_number']
+
 	# get the dropbox token
 	users = table.query(
 		IndexName='phoneNumber-index', KeyConditionExpression=Key('phoneNumber').eq(phone_number)
@@ -37,4 +35,3 @@ def lambda_handler(event, context):
     Bucket=bucket,
     Key=key,  
 	)
-	
